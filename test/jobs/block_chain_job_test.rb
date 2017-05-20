@@ -48,4 +48,24 @@ class BlockChainJobTest < ActiveJob::TestCase
     result_is_within_rage = result_avg_size.between? correct_avg_size - (error_range / block.total_tx_count(block_hash)), correct_avg_size
     assert result_is_within_rage
   end
+
+
+  # 과제2 "블록 해쉬 값과 input or output"을 Argument로 받아서, input 혹은 output의 정보만 출력
+  test "'블록 해쉬 값과 input or output'을 Argument로 받아서, input 혹은 output의 정보만 출력합니다" do
+    block_hash = '0000000000000000010d1fecd817e30ac44c3e82453a84b54b31674e8192a4f8'
+    block = BlockChainJob.new
+
+    # input 정보출력 확인
+    ## 출력된 input 결과의 수 일치를 확인
+    result_input_data = block.get_specific_type(block_hash, 'inputs')
+    if result_input_data.size == 1376
+      result_input_size_is_right = true
+    end
+    ## input의 첫번째 데이터에 sequnce가 있는지 확인합니다
+    result_first_sequence = result_input_data.first.first['sequence']
+    if result_first_sequence == 4294967295
+      first_data_has_right_sequence = true
+    end
+    assert ( result_input_size_is_right && first_data_has_right_sequence )
+  end
 end

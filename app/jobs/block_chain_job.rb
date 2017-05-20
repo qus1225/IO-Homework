@@ -34,6 +34,18 @@ class BlockChainJob < ApplicationJob
     return total_tx_size / total_tx_count(block_hash).to_f
   end
 
+  def get_specific_type(block_hash, type)
+    data = get_json_data(block_hash)
+    total_tx = data["tx"]
+
+    result_data = []
+    total_tx.each do |tx|
+      result_data.push(tx[type])
+    end
+
+    return result_data
+  end
+
   def get_json_data(block_hash)
     uri = "https://blockchain.info/block-index/#{block_hash}?format=json"
     resp = Net::HTTP.get_response(URI.parse(uri))
