@@ -67,5 +67,18 @@ class BlockChainJobTest < ActiveJob::TestCase
       first_data_has_right_sequence = true
     end
     assert ( result_input_size_is_right && first_data_has_right_sequence )
+
+    # output 정보출력 확인
+    ## 출력된 output 결과의 수 일치를 확인
+    result_output_data = block.get_specific_type(block_hash, 'out')
+    if result_output_data.size == 1376
+      result_output_size_is_right = true
+    end
+    ## 출력된 output의 첫번째 데이터의 addr이 일치하는지 확인
+    result_first_addr = result_output_data.first.first['addr']
+    if result_first_addr == '1L75eRMgeCwAxEjD1oWXjLgud9jxwxm34u'
+      first_data_has_right_addr = true
+    end
+    assert ( result_output_size_is_right && first_data_has_right_addr )
   end
 end
