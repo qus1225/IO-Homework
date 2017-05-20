@@ -46,6 +46,16 @@ class BlockChainJob < ApplicationJob
     return result_data
   end
 
+  def total_fee(block_hash)
+    data = get_json_data(block_hash)
+    return data["fee"]
+  end
+
+  def total_size(block_hash)
+    data = get_json_data(block_hash)
+    return data["size"]
+  end
+
   def get_json_data(block_hash)
     uri = "https://blockchain.info/block-index/#{block_hash}?format=json"
     resp = Net::HTTP.get_response(URI.parse(uri))

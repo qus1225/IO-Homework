@@ -26,19 +26,13 @@ class BlockChainJobTest < ActiveJob::TestCase
     assert_equal correct_avg_value, result_avg_value
 
     # 평균 트랜잭션의 수수료(fee)가 맞는지 확인
-    ## 블록구조 정보에 나온 총 수수료값과, json으로 받은 트랜잭션값의 단위가 달라 100,000,000을 곱해줍니다.
-    conditioning_value_for_fee = 100000000
-    origin_total_fee = 1.51631181
-    correct_avg_fee = ((origin_total_fee * conditioning_value_for_fee) / block.total_tx_count(block_hash).to_f).round(5)
+    correct_avg_fee = (block.total_fee(block_hash) / block.total_tx_count(block_hash).to_f).round(5)
     result_avg_fee = block.avg_tx_fee(block_hash).round(5)
     puts "평균 트랜잭션의 수수료: #{result_avg_fee}"
     assert_equal correct_avg_fee, result_avg_fee
 
     # 평균 트랜잭션의 크기(size)가 맞는지 확인
-    ## 블록구조 정보에 나온 총 트랜잭션 크기와, json으로 받은 트랜잭션 크기의 단위가 달라 1,000을 곱해줍니다.
-    conditioning_value_for_size = 1000
-    origin_total_size = 998.222
-    correct_avg_size = ((origin_total_size * conditioning_value_for_size) / block.total_tx_count(block_hash).to_f).round(5)
+    correct_avg_size = (block.total_size(block_hash) / block.total_tx_count(block_hash).to_f).round(5)
     result_avg_size = block.avg_tx_size(block_hash).round(5)
     ## 블록구조 정보에 나온 총 트랜잭션 크기와 개별 트랜잭션 크기를 합산한 값 간에 약 1KB이내의 오차가 있습니다.
     ## 따라서 1KB 범위를 오차범위로 삼아 오차범위 내로 계산될 경우는 맞았다고 간주합니다.
