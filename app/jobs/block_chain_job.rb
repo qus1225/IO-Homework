@@ -1,10 +1,4 @@
 class BlockChainJob < ApplicationJob
-  def total_tx_count(block_hash)
-    data = get_json_data(block_hash)
-    total_tx = data["tx"]
-    return total_tx.size
-  end
-
   def avg_tx_value(block_hash)
     data = get_json_data(block_hash)
     total_tx = data["tx"]
@@ -44,6 +38,11 @@ class BlockChainJob < ApplicationJob
     end
 
     return result_data
+  end
+
+  def total_tx_count(block_hash)
+    data = get_json_data(block_hash)
+    return data["n_tx"]
   end
 
   def total_fee(block_hash)
