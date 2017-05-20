@@ -22,5 +22,12 @@ class BlockChainJobTest < ActiveJob::TestCase
     result_avg_value = block.avg_tx_value(block_hash).round(5)
     puts "평균 트랜잭션의 값: #{result_avg_value}"
     assert_equal correct_avg_value, result_avg_value
+
+    # 평균 트랜잭션의 수수료(fee)가 맞는지 확인
+    ## 블록구조 정보에 나온 총 수수료값과, json으로 받은 트랜잭션값의 단위가 달라 100,000,000을 곱해줍니다.
+    correct_avg_fee = ((1.51631181*100000000) / block.total_tx_count(block_hash).to_f).round(5)
+    result_avg_fee = block.avg_tx_fee(block_hash).round(5)
+    puts "평균 트랜잭션의 수수료: #{result_avg_fee}"
+    assert_equal correct_avg_fee, result_avg_fee
   end
 end
